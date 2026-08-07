@@ -263,6 +263,10 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
     while True:
         if time.localtime().tm_hour >= 17:
             return
+        elif time.localtime().tm_hour <= 4:
+            time.sleep(3600)
+        elif time.localtime().tm_hour <= 5:
+            time.sleep(1200)
         try:
             start = time.time()
             for dic in range(len(df)):
