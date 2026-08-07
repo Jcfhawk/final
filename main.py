@@ -23,6 +23,7 @@ if __name__ == "__main__":
     process3.join()
     process4.join()
 
+    print("Done Trading for the Day! $$$$")
 
 
 
