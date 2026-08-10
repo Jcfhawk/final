@@ -260,13 +260,23 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
     opts.add_argument("--headless")
     driver = uc.Chrome(use_subprocess=True, options=opts, driver_executable_path=driver_path, version_main=version)
     driver.set_page_load_timeout(8)
+    start_trading1 = 315
+    end_trading1 = 510
+    start_trading2 = 899
+    end_trading2 = 960
+
     while True:
-        if time.localtime().tm_hour >= 17:
+        now = time.localtime()
+        current_time = now.tm_hour * 60 + now.tm_min
+
+        if current_time > end_trading2:
             return
-        elif time.localtime().tm_hour <= 4:
-            time.sleep(3600)
-        elif time.localtime().tm_hour <= 5:
-            time.sleep(1200)
+        elif current_time < start_trading1:
+            mtg = start_trading2 - current_time
+            time.sleep(mtg * 60)
+        elif end_trading1 < current_time < start_trading2:
+            mtg = end_trading2 - current_time
+            time.sleep(mtg * 60)
         try:
             start = time.time()
             for dic in range(len(df)):
