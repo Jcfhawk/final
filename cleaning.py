@@ -274,9 +274,11 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
         elif current_time < start_trading1:
             mtg = start_trading2 - current_time
             time.sleep(mtg * 60)
+            continue
         elif end_trading1 < current_time < start_trading2:
             mtg = end_trading2 - current_time
             time.sleep(mtg * 60)
+            continue
         try:
             start = time.time()
             for dic in range(len(df)):
