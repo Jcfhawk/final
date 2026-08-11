@@ -272,11 +272,11 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
         if current_time > end_trading2:
             return
         elif current_time < start_trading1:
-            mtg = start_trading2 - current_time
+            mtg = start_trading1 - current_time
             time.sleep(mtg * 60)
             continue
         elif end_trading1 < current_time < start_trading2:
-            mtg = end_trading2 - current_time
+            mtg = start_trading2 - current_time
             time.sleep(mtg * 60)
             continue
         try:
@@ -286,11 +286,15 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                 company = row['Company'].rstrip(".")
                 newsroom = row['Newsroom']
                 ticker = row['Ticker']
-                html_content = get_page(newsroom, driver=driver, company=company)
-                if html_content == "Not Good":
+                try:
+                    html_content = get_page(newsroom, driver=driver, company=company)
+                    if html_content == "Not Good":
+                        continue
+                    links_to_check = get_links(company, html_content)
+                    check_links(company, links_to_check, ticker, newsroom, multilist, row)
+                except Exception as e:
+                    print(f"[{driv}] Error occurred: {e}")
                     continue
-                links_to_check = get_links(company, html_content)
-                check_links(company, links_to_check, ticker, newsroom, multilist, row)
             driver.close()
             driver.quit()
             driver = restart_chrome(driv, driver_path, version, port, port2, x)
