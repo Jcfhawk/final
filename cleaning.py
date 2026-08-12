@@ -265,6 +265,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
     start_trading2 = 899
     end_trading2 = 960
     cur_trade_time = "Before"
+    flag = False
 
     while True:
         now = time.localtime()
@@ -275,14 +276,22 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
         elif current_time < start_trading1:
             mtg = start_trading1 - current_time
             time.sleep(mtg * 60)
+            flag = True
             continue
         elif end_trading1 < current_time < start_trading2:
             mtg = start_trading2 - current_time
             time.sleep(mtg * 60)
+            flag = True
             continue
 
         if current_time > start_trading2:
             cur_trade_time = "After"
+
+        if flag:
+            driver.close()
+            driver.quit()
+            driver = restart_chrome(driv, driver_path, version, port, port2, x)
+            flag = False
 
         try:
             start = time.time()
