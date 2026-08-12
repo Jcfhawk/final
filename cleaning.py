@@ -264,6 +264,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
     end_trading1 = 510
     start_trading2 = 899
     end_trading2 = 960
+    cur_trade_time = "Before"
 
     while True:
         now = time.localtime()
@@ -279,10 +280,16 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
             mtg = start_trading2 - current_time
             time.sleep(mtg * 60)
             continue
+
+        if current_time > start_trading2:
+            cur_trade_time = "After"
+
         try:
             start = time.time()
             for dic in range(len(df)):
                 row = df.iloc[dic]
+                if row["Hour"] != cur_trade_time:
+                    continue
                 company = row['Company'].rstrip(".")
                 newsroom = row['Newsroom']
                 ticker = row['Ticker']
