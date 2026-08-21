@@ -5,7 +5,7 @@ from seperate import seperation
 
 if __name__ == "__main__":
     freeze_support()
-    version = int(input("What version of chrome is in use?"))
+    version = 150
     manager = Manager()
     check_stocks = manager.list()
     df1, df2, df3, df4, port1, port2, port3, port4,\
