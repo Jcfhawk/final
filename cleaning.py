@@ -202,6 +202,7 @@ def check_links(company, links_to_check, ticker, newsroom, multilist, row):
 
 
 def restart_chrome(driv, driver_path, version, port, port2, x):
+    print("Restarting chrome...")
     x += 1
     time.sleep(1)
     if driv == "Driver 1":
@@ -263,7 +264,6 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
     start_trading2 = 898
     end_trading2 = 960
     cur_trade_time = "Before"
-    flag = False
 
     while True:
         now = time.localtime()
@@ -274,10 +274,6 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
 
         if current_time >= start_trading2:
             cur_trade_time = "After"
-
-        if flag:
-            driver = restart_chrome(driv, driver_path, version, port, port2, x)
-            flag = False
 
         try:
             start = time.time()
@@ -295,7 +291,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                     links_to_check = get_links(company, html_content)
                     check_links(company, links_to_check, ticker, newsroom, multilist, row)
                 except Exception as e:
-                    print(f"[{driv}] Error occurred: {e}")
+                    print(f"[{driv}] Error occurred 2: {e}")
                     continue
             driver.close()
             driver.quit()
@@ -303,7 +299,9 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
             end = time.time()
             print(f"{driv}: {end - start}")
         except Exception as e:
-            print(f"[{driv}] Error occurred: {e}")
+            print(f"[{driv}] Error occurred 1: {e}")
+            driver.close()
+            driver.quit()
             continue
 
 
