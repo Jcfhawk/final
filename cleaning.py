@@ -271,7 +271,9 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
         current_time = now.tm_hour * 60 + now.tm_min
 
         if current_time >= end_trading2:
+            print("Close 1")
             driver.close()
+            print("Close 2")
             driver.quit()
             return
 
@@ -279,6 +281,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
             cur_trade_time = "After"
 
         try:
+            print("Trying step 1")
             start = time.time()
             for dic in range(len(df)):
                 row = df.iloc[dic]
@@ -294,14 +297,18 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                     links_to_check = get_links(company, html_content)
                     check_links(company, links_to_check, ticker, newsroom, multilist, row)
                 except Exception as e:
+                    print("Ending this section 2")
                     print(f"[{driv}] Error occurred 2: {e}")
                     continue
+            print("trying step 2")
             driver.close()
+            print("Trying step 3")
             driver.quit()
             driver, x = restart_chrome(driv, driver_path, version, port, port2, x)
             end = time.time()
             print(f"{driv}: {end - start}")
         except Exception as e:
+            print("Ending this section 1")
             print(f"[{driv}] Error occurred 1: {e}")
             continue
 
