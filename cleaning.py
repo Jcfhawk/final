@@ -223,7 +223,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             opts1.add_argument("--headless")
             driver = uc.Chrome(use_subprocess=True, options=opts1, driver_executable_path=driver_path, version_main=version)
             driver.set_page_load_timeout(8)
-            return driver
+            return driver, x
         except Exception as e:
             opts1 = Options()
             opts1.debugger_address = f"127.0.0.1:{port2}"
@@ -231,7 +231,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             driver = uc.Chrome(use_subprocess=True, options=opts1, driver_executable_path=driver_path,
                                version_main=version)
             driver.set_page_load_timeout(8)
-            return driver
+            return driver, x
     else:
         cmd = f'start chrome --remote-debugging-port={port} --user-data-dir="C:/final/{directory}"'
         os.system(cmd)
@@ -242,7 +242,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             opts2.add_argument("--headless")
             driver = uc.Chrome(use_subprocess=True, options=opts2, driver_executable_path=driver_path, version_main=version)
             driver.set_page_load_timeout(8)
-            return driver
+            return driver, x
         except Exception as e:
             time.sleep(2)
             opts2 = Options()
@@ -251,7 +251,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             driver = uc.Chrome(use_subprocess=True, options=opts2, driver_executable_path=driver_path,
                                version_main=version)
             driver.set_page_load_timeout(8)
-            return driver
+            return driver, x
 
 
 def scrape_section(df, port, driver_path, multilist, version, driv, port2):
@@ -295,13 +295,11 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                     continue
             driver.close()
             driver.quit()
-            driver = restart_chrome(driv, driver_path, version, port, port2, x)
+            driver, x = restart_chrome(driv, driver_path, version, port, port2, x)
             end = time.time()
             print(f"{driv}: {end - start}")
         except Exception as e:
             print(f"[{driv}] Error occurred 1: {e}")
-            driver.close()
-            driver.quit()
             continue
 
 
