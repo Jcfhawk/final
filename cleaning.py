@@ -262,7 +262,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
     driver = uc.Chrome(use_subprocess=True, options=opts, driver_executable_path=driver_path, version_main=version)
     driver.set_page_load_timeout(8)
     start_trading2 = 898
-    end_trading2 = 960
+    end_trading2 = 100000 #960
     cur_trade_time = "Before"
     print(f"Starting: Driver: {driv}")
 
@@ -271,6 +271,8 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
         current_time = now.tm_hour * 60 + now.tm_min
 
         if current_time >= end_trading2:
+            driver.close()
+            driver.quit()
             return
 
         if current_time >= start_trading2:
