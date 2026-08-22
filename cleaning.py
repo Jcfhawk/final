@@ -264,6 +264,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
     start_trading2 = 898
     end_trading2 = 960
     cur_trade_time = "Before"
+    print(f"Starting: Driver: {driv}")
 
     while True:
         now = time.localtime()
