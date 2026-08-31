@@ -8,6 +8,7 @@ import re
 import os
 from datetime import datetime
 from urllib.parse import urlparse, urljoin
+import traceback
 
 # Remove this section after done with ml training dataset
 def finish_link(press_release, newsroom):
@@ -293,6 +294,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                         html_content = get_page(newsroom, driver=driver, company=company)
                     except Exception as e:
                         print(driv, " Error occurred in html_content:", e)
+                        traceback.print_exc()
                         continue
                     if html_content == "Not Good":
                         continue
@@ -300,11 +302,13 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                         links_to_check = get_links(company, html_content)
                     except Exception as e:
                         print(driv, " Error occurred in links_to_check:", e)
+                        traceback.print_exc()
                         continue
                     try:
                         check_links(company, links_to_check, ticker, newsroom, multilist, row)
                     except Exception as e:
                         print(driv, " Error occurred in check_links:", e)
+                        traceback.print_exc()
                         continue
                 except Exception as e:
                     print(f"[{driv}] Error occurred 2: {e}")
