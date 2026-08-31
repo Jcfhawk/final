@@ -222,7 +222,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             opts1.debugger_address = f"127.0.0.1:{port2}"
             opts1.add_argument("--headless")
             driver = uc.Chrome(use_subprocess=True, options=opts1, driver_executable_path=driver_path, version_main=version)
-            driver.set_page_load_timeout(8)
+            driver.set_page_load_timeout(3)
             return driver, x
         except Exception as e:
             opts1 = Options()
@@ -230,7 +230,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             opts1.add_argument("--headless")
             driver = uc.Chrome(use_subprocess=True, options=opts1, driver_executable_path=driver_path,
                                version_main=version)
-            driver.set_page_load_timeout(8)
+            driver.set_page_load_timeout(3)
             return driver, x
     else:
         cmd = f'start chrome --remote-debugging-port={port} --user-data-dir="C:/final/{directory}"'
@@ -241,7 +241,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             opts2.debugger_address = f"127.0.0.1:{port}"
             opts2.add_argument("--headless")
             driver = uc.Chrome(use_subprocess=True, options=opts2, driver_executable_path=driver_path, version_main=version)
-            driver.set_page_load_timeout(8)
+            driver.set_page_load_timeout(3)
             return driver, x
         except Exception as e:
             time.sleep(2)
@@ -250,7 +250,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             opts2.add_argument("--headless")
             driver = uc.Chrome(use_subprocess=True, options=opts2, driver_executable_path=driver_path,
                                version_main=version)
-            driver.set_page_load_timeout(8)
+            driver.set_page_load_timeout(3)
             return driver, x
 
 
@@ -260,7 +260,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
     opts.debugger_address = f"127.0.0.1:{port}"
     opts.add_argument("--headless")
     driver = uc.Chrome(use_subprocess=True, options=opts, driver_executable_path=driver_path, version_main=version)
-    driver.set_page_load_timeout(8)
+    driver.set_page_load_timeout(3)
     start_trading2 = 898
     end_trading2 = 100000 #960
     cur_trade_time = "Before"
