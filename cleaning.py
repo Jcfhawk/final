@@ -196,7 +196,7 @@ def check_links(company, links_to_check, ticker, newsroom, multilist, row):
                     "Title": title, "Ticker": ticker})
                 to_send_message = {"Company": company, "Newsroom": newsroom, "Link": link, "Title": title,
                                    "Ticker": ticker, "Date": date, "Time": time1, "Term": row["Term"], "RE": row["RE"],
-                                   "OG": row["OG"], "MRKTCAP": row["MRKTCAP"]}
+                                   "ROG": row["ROG"], "EOG": row["EOG"], "MRKTCAP": row["MRKTCAP"]}
                 send_message(to_send_message)
                 file3.write(link_to_check + "\n")
 
