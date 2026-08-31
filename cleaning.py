@@ -289,11 +289,23 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                 newsroom = row['Newsroom']
                 ticker = row['Ticker']
                 try:
-                    html_content = get_page(newsroom, driver=driver, company=company)
+                    try:
+                        html_content = get_page(newsroom, driver=driver, company=company)
+                    except Exception as e:
+                        print(driv, " Error occurred in html_content:", e)
+                        continue
                     if html_content == "Not Good":
                         continue
-                    links_to_check = get_links(company, html_content)
-                    check_links(company, links_to_check, ticker, newsroom, multilist, row)
+                    try:
+                        links_to_check = get_links(company, html_content)
+                    except Exception as e:
+                        print(driv, " Error occurred in links_to_check:", e)
+                        continue
+                    try:
+                        check_links(company, links_to_check, ticker, newsroom, multilist, row)
+                    except Exception as e:
+                        print(driv, " Error occurred in check_links:", e)
+                        continue
                 except Exception as e:
                     print(f"[{driv}] Error occurred 2: {e}")
                     continue
