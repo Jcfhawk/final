@@ -9,6 +9,7 @@ import os
 from datetime import datetime
 from urllib.parse import urlparse, urljoin
 import traceback
+from logger import error_log
 
 # Remove this section after done with ml training dataset
 def finish_link(press_release, newsroom):
@@ -59,22 +60,24 @@ extr_companies = [
 ]
 
 
-def get_page(url, driver, company):
+def get_page(url, driver):
     try:
         driver.get(url)
         time.sleep(1)
     except Exception:
+        error_log("Getting url 1")
         time.sleep(1)
         try:
             driver.get(url)
             time.sleep(1)
         except Exception:
-
+            error_log("Getting url 2")
             return "Not Good"
     try:
         html_content = driver.page_source
         soup = BeautifulSoup(html_content, "html.parser")
     except Exception:
+        error_log("Getting html content")
         return "Not Good"
 
     try:
@@ -86,6 +89,7 @@ def get_page(url, driver, company):
                 iframe_html = driver.page_source
                 iframe_contents[f"iframe_{index}"] = iframe_html
             except Exception as iframe_error:
+                error_log("Iframe Error")
                 pass
             finally:
                 driver.switch_to.default_content()
@@ -98,6 +102,7 @@ def get_page(url, driver, company):
         return html_content
 
     except Exception:
+        error_log("Could not get MAIN PAGE HTML")
         return f"<!-- Main Page HTML -->\n{soup.prettify()}\n\n"
 
 
@@ -226,6 +231,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             driver.set_page_load_timeout(3)
             return driver, x
         except Exception as e:
+            error_log("Restarting chomre 1")
             opts1 = Options()
             opts1.debugger_address = f"127.0.0.1:{port2}"
             opts1.add_argument("--headless")
@@ -245,6 +251,7 @@ def restart_chrome(driv, driver_path, version, port, port2, x):
             driver.set_page_load_timeout(3)
             return driver, x
         except Exception as e:
+            error_log("Restarting chrome 2")
             time.sleep(2)
             opts2 = Options()
             opts2.debugger_address = f"127.0.0.1:{port}"
@@ -291,8 +298,9 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                 ticker = row['Ticker']
                 try:
                     try:
-                        html_content = get_page(newsroom, driver=driver, company=company)
+                        html_content = get_page(newsroom, driver=driver)
                     except Exception as e:
+                        error_log("HMTL CONTENT")
                         print(driv, " Error occurred in html_content:", e)
                         traceback.print_exc()
                         continue
@@ -302,15 +310,18 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
                         links_to_check = get_links(company, html_content)
                     except Exception as e:
                         print(driv, " Error occurred in links_to_check:", e)
+                        error_log("links to check")
                         traceback.print_exc()
                         continue
                     try:
                         check_links(company, links_to_check, ticker, newsroom, multilist, row)
                     except Exception as e:
                         print(driv, " Error occurred in check_links:", e)
+                        error_log("check links")
                         traceback.print_exc()
                         continue
                 except Exception as e:
+                    error_log("Section 2 couldn't keep up")
                     print(f"[{driv}] Error occurred 2: {e}")
                     continue
             driver.close()
@@ -320,6 +331,7 @@ def scrape_section(df, port, driver_path, multilist, version, driv, port2):
             end = time.time()
             print(f"{driv}: {end - start}")
         except Exception as e:
+            error_log("Final error")
             print(f"[{driv}] Error occurred 1: {e}")
             continue
 
