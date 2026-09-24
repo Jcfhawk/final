@@ -196,7 +196,7 @@ def check_links(company, links_to_check, ticker, newsroom, multilist, row):
                 title = link_to_check.split(", Link: ")[0].split("Title: ")[1].strip()
                 link = link_to_check.split("Link: ")[1].strip()
                 date = datetime.now().strftime("%m/%d/%y")
-                time1 = datetime.now().strftime("%H:%M:%S")
+                time1 = time.time()
                 multilist.append(
                     {"Company": company, "Newsroom": newsroom, "Link": link,
                     "Title": title, "Ticker": ticker})
